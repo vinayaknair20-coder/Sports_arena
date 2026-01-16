@@ -1,0 +1,263 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap');
+
+:root {
+  /* Ultra-Premium Palette */
+  --primary: #D32F2F;
+  /* Crimson Red */
+  --primary-rgb: 211, 47, 47;
+  --secondary: #121212;
+  /* Jet Black */
+  --accent: #FFC107;
+  /* Electric Yellow */
+  --bg-light: #F8F9FA;
+  /* Softer Off-White */
+  --bg-dark: #0A0A0A;
+  /* Deep Black */
+
+  --text-main: #1A1A1A;
+  --text-muted: #A1A1A1;
+  /* Increased contrast for WCAG AA */
+  --text-white: #FFFFFF;
+
+  --border: rgba(0, 0, 0, 0.06);
+  --border-white: rgba(255, 255, 255, 0.1);
+
+  /* Precision Spacing */
+  --section-pad: clamp(5rem, 10vw, 10rem);
+  --container-max: 1400px;
+
+  /* Design Tokens */
+  --radius: 0px;
+  /* Sharp, high-fashion sports look */
+  --transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-main);
+  line-height: 1.2;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Typography Editorial Styles */
+.h-jumbo {
+  font-size: clamp(4rem, 15vw, 12rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+  line-height: 0.8;
+}
+
+.h-section {
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+}
+
+.t-serif-style {
+  font-style: italic;
+  color: var(--primary);
+}
+
+/* Editorial Buttons */
+.btn-lux {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 4rem;
+  border: 1px solid var(--secondary);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.8rem;
+  background: transparent;
+  color: var(--secondary);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-lux-primary {
+  background: var(--secondary);
+  color: white;
+  border: none;
+}
+
+.btn-lux-primary:hover {
+  background: var(--primary);
+  transform: scale(1.05);
+}
+
+.btn-lux:hover {
+  background: var(--secondary);
+  color: white;
+}
+
+/* Bento Grid System */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+}
+
+.bento-item {
+  position: relative;
+  overflow: hidden;
+  background: white;
+  padding: 3rem;
+  border: 1px solid var(--border);
+}
+
+/* Specific Section Styles */
+.hero-editorial {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-dark);
+  color: white;
+}
+
+.hero-bg-img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.4;
+  mask-image: linear-gradient(to left, black 50%, transparent);
+}
+
+.marquee-editorial {
+  background: var(--secondary);
+  color: white;
+  padding: 1rem 0;
+  overflow: hidden;
+  border-top: 1px solid var(--border-white);
+  border-bottom: 1px solid var(--border-white);
+}
+
+.marquee-content {
+  display: flex;
+  gap: 4rem;
+  animation: scroll-lux 30s linear infinite;
+  white-space: nowrap;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.4em;
+}
+
+@keyframes scroll-lux {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Utils */
+.pad-v {
+  padding-top: var(--section-pad);
+  padding-bottom: var(--section-pad);
+}
+
+.m-b-lg {
+  margin-bottom: 4rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.gap-6 {
+  gap: 1.5rem;
+}
+
+.gap-8 {
+  gap: 2rem;
+}
+
+.gap-10 {
+  gap: 1.5rem;
+}
+
+.gap-12 {
+  gap: 3rem;
+}
+
+@media (max-width: 768px) {
+  .h-jumbo {
+    font-size: clamp(3rem, 12vw, 5rem);
+  }
+
+  .h-section {
+    font-size: clamp(2rem, 10vw, 3.5rem);
+  }
+
+  .hero-bg-img {
+    width: 100%;
+    opacity: 0.2;
+    mask-image: linear-gradient(to top, black 30%, transparent);
+  }
+
+  .m-b-lg {
+    margin-bottom: 2rem;
+  }
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Custom Scrollbar Lux */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+}
