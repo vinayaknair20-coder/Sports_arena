@@ -215,6 +215,19 @@ body {
   gap: 2rem;
 }
 
+/* Performance-Focused Scroll Reveals */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform, opacity;
+}
+
+.scroll-reveal.reveal-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .gap-10 {
   gap: 1.5rem;
 }

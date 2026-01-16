@@ -8,7 +8,7 @@ const HomePage = () => {
     const containerRef = useRef(null);
 
     useEffect(() => {
-        // Advanced Anime.js v4 Timeline for Hero
+        // Advanced Anime.js v4 Timeline for Hero (One-time load)
         const tl = createTimeline({
             easing: 'easeOutExpo',
         });
@@ -35,29 +35,28 @@ const HomePage = () => {
             easing: 'linear'
         }, 0);
 
-        // Scroll Intersection Observer for Entrance Animations
+        // Scroll Intersection Observer - Class Toggling Only (High Performance)
         const observerOptions = {
-            threshold: 0.1,
+            threshold: 0.15,
             rootMargin: '0px 0px -50px 0px'
         };
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const target = entry.target;
-                    animate(target, {
-                        translateY: [40, 0],
-                        opacity: [0, 1],
-                        easing: 'easeOutExpo',
-                        duration: 1000,
-                        delay: target.dataset.delay ? parseInt(target.dataset.delay) : 0
-                    });
-                    observer.unobserve(target);
+                    entry.target.classList.add('reveal-active');
+                    observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
-        document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+        document.querySelectorAll('.scroll-reveal').forEach(el => {
+            // Transfer Javascript delay to CSS transition-delay
+            if (el.dataset.delay) {
+                el.style.transitionDelay = `${el.dataset.delay}ms`;
+            }
+            observer.observe(el);
+        });
 
         return () => observer.disconnect();
     }, []);
