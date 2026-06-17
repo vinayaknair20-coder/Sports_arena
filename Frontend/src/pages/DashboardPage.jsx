@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
@@ -14,10 +14,27 @@ import {
     User,
     Zap
 } from 'lucide-react';
+import api from '../services/api';
 import heroMultisport from '../assets/hero-multisport.png';
 
 const DashboardPage = () => {
     const { user, loading } = useAuth();
+    const [bookings, setBookings] = useState([]);
+
+    useEffect(() => {
+        if (!user) return;
+
+        const fetchBookings = async () => {
+            try {
+                const res = await api.get('/api/turfs/bookings/');
+                setBookings(res.data);
+            } catch (err) {
+                setBookings([]);
+            }
+        };
+
+        fetchBookings();
+    }, [user]);
 
     if (loading) {
         return (
@@ -38,8 +55,11 @@ const DashboardPage = () => {
         { title: 'Gear Up', body: 'Browse equipment before match day.', to: '/shop', icon: <ShoppingBag size={22} /> },
     ];
 
+    const activeBookings = bookings.filter((booking) => booking.status !== 'cancelled');
+    const nextBooking = activeBookings[0];
+
     const stats = [
-        { label: 'Active Bookings', value: '0', hint: 'No current slot', icon: <CalendarDays size={22} /> },
+        { label: 'Active Bookings', value: String(activeBookings.length), hint: activeBookings.length ? 'Ready to play' : 'No current slot', icon: <CalendarDays size={22} /> },
         { label: 'Arena Points', value: '150', hint: 'Starter rank', icon: <Medal size={22} /> },
         { label: 'Match Activity', value: '2', hint: 'This week', icon: <Zap size={22} /> },
     ];
@@ -145,6 +165,31 @@ const DashboardPage = () => {
                                 </Link>
                             ))}
                         </div>
+                    </section>
+
+                    <section className="dashboard-panel dashboard-wide">
+                        <div className="dashboard-section-title">
+                            <CalendarDays size={20} />
+                            <h2>My Arena Bookings</h2>
+                        </div>
+                        {nextBooking ? (
+                            <div className="booking-preview">
+                                <div>
+                                    <p>Next Slot</p>
+                                    <strong>{nextBooking.turf_details?.name || 'Arena Booking'}</strong>
+                                    <span>{nextBooking.date} at {String(nextBooking.start_time).slice(0, 5)} - {String(nextBooking.end_time).slice(0, 5)}</span>
+                                </div>
+                                <Link to="/turfs">Book Another</Link>
+                            </div>
+                        ) : (
+                            <div className="booking-empty">
+                                <div>
+                                    <strong>No turf booked yet.</strong>
+                                    <p>Pick an arena and reserve your first slot.</p>
+                                </div>
+                                <Link to="/turfs">Explore Arenas</Link>
+                            </div>
+                        )}
                     </section>
 
                     <section className="dashboard-panel dashboard-wide">
@@ -538,6 +583,60 @@ const DashboardPage = () => {
                     gap: 0.65rem;
                 }
 
+                .booking-preview,
+                .booking-empty {
+                    min-height: 92px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 1rem;
+                    background: #101010;
+                    color: #fff;
+                    padding: 1rem;
+                }
+
+                .booking-preview p {
+                    color: var(--primary);
+                    font-size: 0.68rem;
+                    font-weight: 900;
+                    letter-spacing: 0.18em;
+                    text-transform: uppercase;
+                    margin: 0 0 0.4rem;
+                }
+
+                .booking-preview strong,
+                .booking-empty strong {
+                    display: block;
+                    font-size: 1.25rem;
+                    font-weight: 900;
+                    text-transform: uppercase;
+                }
+
+                .booking-preview span,
+                .booking-empty p {
+                    display: block;
+                    color: rgba(255,255,255,0.68);
+                    font-weight: 700;
+                    margin: 0.35rem 0 0;
+                }
+
+                .booking-preview a,
+                .booking-empty a {
+                    flex-shrink: 0;
+                    min-height: 44px;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #fff;
+                    background: var(--primary);
+                    text-decoration: none;
+                    font-size: 0.7rem;
+                    font-weight: 900;
+                    letter-spacing: 0.14em;
+                    text-transform: uppercase;
+                    padding: 0 1rem;
+                }
+
                 .recommended-item {
                     min-height: 70px;
                     display: flex;
@@ -614,6 +713,16 @@ const DashboardPage = () => {
                         max-width: none;
                         text-align: left;
                         margin-top: 0.35rem;
+                    }
+
+                    .booking-preview,
+                    .booking-empty {
+                        display: block;
+                    }
+
+                    .booking-preview a,
+                    .booking-empty a {
+                        margin-top: 1rem;
                     }
                 }
             `}</style>
